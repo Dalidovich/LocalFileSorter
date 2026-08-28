@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>LocalFileSorter</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
