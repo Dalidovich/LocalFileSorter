@@ -233,11 +233,15 @@ public sealed class PreviewPanel : Panel, IDisposable
 
         bool goPrevious = Button.Draw(painter, input, previous, strings.PreviewPrevious, session.CanMovePrevious)
             || input.KeyPressed(Keyboard.Key.Left)
-            || input.KeyPressed(Keyboard.Key.Up);
+            || input.KeyPressed(Keyboard.Key.Up)
+            || input.KeyPressed(Keyboard.Key.A)
+            || input.KeyPressed(Keyboard.Key.W);
 
         bool goNext = Button.Draw(painter, input, next, strings.PreviewNext, session.CanMoveNext)
             || input.KeyPressed(Keyboard.Key.Right)
-            || input.KeyPressed(Keyboard.Key.Down);
+            || input.KeyPressed(Keyboard.Key.Down)
+            || input.KeyPressed(Keyboard.Key.D)
+            || input.KeyPressed(Keyboard.Key.S);
 
         if (goPrevious)
         {
