@@ -98,6 +98,15 @@ public sealed class Strings
         TextTruncated = catalog.Resolve("text.truncated");
         TextTruncationNotice = catalog.Resolve("text.truncationNotice");
 
+        ArchiveFormat = catalog.Resolve("archive.format");
+        ArchiveEntries = catalog.Resolve("archive.entries");
+        ArchiveUncompressed = catalog.Resolve("archive.uncompressed");
+        ArchiveEmpty = catalog.Resolve("archive.empty");
+        ArchiveTruncationNotice = catalog.Resolve("archive.truncationNotice");
+        ArchiveDamaged = catalog.Resolve("archive.damaged");
+        ArchiveEncrypted = catalog.Resolve("archive.encrypted");
+        ArchiveTooLarge = catalog.Resolve("archive.tooLarge");
+
         CommonYes = catalog.Resolve("common.yes");
         CommonNo = catalog.Resolve("common.no");
         CommonCancel = catalog.Resolve("common.cancel");
@@ -203,6 +212,15 @@ public sealed class Strings
     public string TextEncoding { get; }
     public string TextTruncated { get; }
     public string TextTruncationNotice { get; }
+
+    public string ArchiveFormat { get; }
+    public string ArchiveEntries { get; }
+    public string ArchiveUncompressed { get; }
+    public string ArchiveEmpty { get; }
+    public string ArchiveTruncationNotice { get; }
+    public string ArchiveDamaged { get; }
+    public string ArchiveEncrypted { get; }
+    public string ArchiveTooLarge { get; }
 
     public string CommonYes { get; }
     public string CommonNo { get; }

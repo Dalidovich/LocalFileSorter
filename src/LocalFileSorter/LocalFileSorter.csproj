@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="SFML.Net" Version="3.0.0" />
+    <PackageReference Include="SharpCompress" Version="0.50.4" />
   </ItemGroup>
 
   <ItemGroup>

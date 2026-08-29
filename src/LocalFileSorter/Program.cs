@@ -5,6 +5,7 @@ using LocalFileSorter.Common.Model;
 using LocalFileSorter.Common.Persistence;
 using LocalFileSorter.Common.Services;
 using LocalFileSorter.Previews;
+using LocalFileSorter.Previews.Archive;
 using LocalFileSorter.Previews.Image;
 using LocalFileSorter.Previews.Text;
 using LocalFileSorter.Ui.Rendering;
@@ -46,6 +47,7 @@ public static class Program
         {
             new TextPreviewProvider(strings),
             new ImagePreviewProvider(strings),
+            new ArchivePreviewProvider(strings),
         });
         ScanResult scan = SourceScanner.Scan(options.SourceRoot, registry.SupportedExtensions);
         MappingResult mapping = BucketMapper.Map(options.DestinationRoot, []);

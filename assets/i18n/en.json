@@ -93,6 +93,15 @@
   "text.truncated": "Truncated",
   "text.truncationNotice": "Preview truncated at {0}.",
 
+  "archive.format": "Format",
+  "archive.entries": "Entries",
+  "archive.uncompressed": "Uncompressed",
+  "archive.empty": "Archive has no entries.",
+  "archive.truncationNotice": "Listing truncated at {0} entries.",
+  "archive.damaged": "Archive is damaged or uses an unsupported format.",
+  "archive.encrypted": "Archive is encrypted; the listing cannot be read.",
+  "archive.tooLarge": "Archive is too large to preview.",
+
   "common.yes": "Yes",
   "common.no": "No",
   "common.cancel": "Cancel",
