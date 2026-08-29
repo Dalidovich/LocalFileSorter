@@ -58,6 +58,7 @@ public sealed class AppShell : IDisposable
 
         window.SetMinimumSize(new Vector2u(MinimumWidth, MinimumHeight));
         window.SetFramerateLimit(FrameRateLimit);
+        WindowIcon.Apply(window);
 
         painter = new Painter(window, fonts);
         previewPanel = new PreviewPanel(strings, session, plan, tooltips);
