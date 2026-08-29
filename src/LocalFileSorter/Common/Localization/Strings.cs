@@ -93,6 +93,13 @@ public sealed class Strings
         ImageDecodeFailed = catalog.Resolve("image.decodeFailed");
         ImageTooLarge = catalog.Resolve("image.tooLarge");
 
+        SvgViewport = catalog.Resolve("svg.viewport");
+        SvgRendered = catalog.Resolve("svg.rendered");
+        SvgSizeValue = catalog.Resolve("svg.sizeValue");
+        SvgDecodeFailed = catalog.Resolve("svg.decodeFailed");
+        SvgEmpty = catalog.Resolve("svg.empty");
+        SvgTooLarge = catalog.Resolve("svg.tooLarge");
+
         TextLines = catalog.Resolve("text.lines");
         TextEncoding = catalog.Resolve("text.encoding");
         TextTruncated = catalog.Resolve("text.truncated");
@@ -207,6 +214,13 @@ public sealed class Strings
     public string ImageResolutionValue { get; }
     public string ImageDecodeFailed { get; }
     public string ImageTooLarge { get; }
+
+    public string SvgViewport { get; }
+    public string SvgRendered { get; }
+    public string SvgSizeValue { get; }
+    public string SvgDecodeFailed { get; }
+    public string SvgEmpty { get; }
+    public string SvgTooLarge { get; }
 
     public string TextLines { get; }
     public string TextEncoding { get; }

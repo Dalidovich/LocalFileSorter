@@ -88,6 +88,13 @@
   "image.decodeFailed": "Cannot decode the image.",
   "image.tooLarge": "Image is too large to preview.",
 
+  "svg.viewport": "Viewport",
+  "svg.rendered": "Rendered",
+  "svg.sizeValue": "{0} x {1}",
+  "svg.decodeFailed": "Cannot parse the SVG document.",
+  "svg.empty": "SVG has no drawable content.",
+  "svg.tooLarge": "SVG is too large to preview.",
+
   "text.lines": "Lines",
   "text.encoding": "Encoding",
   "text.truncated": "Truncated",

@@ -8,6 +8,7 @@ using LocalFileSorter.Previews;
 using LocalFileSorter.Previews.Archive;
 using LocalFileSorter.Previews.Image;
 using LocalFileSorter.Previews.Text;
+using LocalFileSorter.Previews.Vector;
 using LocalFileSorter.Ui.Rendering;
 using LocalFileSorter.Ui.Shell;
 using LocalFileSorter.Ui.Theme;
@@ -48,6 +49,7 @@ public static class Program
             new TextPreviewProvider(strings),
             new ImagePreviewProvider(strings),
             new ArchivePreviewProvider(strings),
+            new SvgPreviewProvider(strings),
         });
         ScanResult scan = SourceScanner.Scan(options.SourceRoot, registry.SupportedExtensions);
         MappingResult mapping = BucketMapper.Map(options.DestinationRoot, []);

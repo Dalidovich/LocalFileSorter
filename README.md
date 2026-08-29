@@ -2,7 +2,7 @@
 
 Настольная утилита для быстрой раскладки файлов по подпапкам-«бакетам». Приложение показывает один файл за раз с превью, вы кликом по цвету назначаете ему бакет и переходите к следующему. На диске ничего не двигается, пока вы явно не подтвердите перенос.
 
-.NET 9, SFML 3.0, SharpCompress, весь интерфейс отрисован вручную. Windows x64 / ARM64.
+.NET 9, SFML 3.0, SharpCompress, Svg.Skia, весь интерфейс отрисован вручную. Windows x64 / ARM64.
 
 ## Как это работает
 
@@ -28,6 +28,7 @@
 | Текст | `.txt` `.md` `.log` `.json` `.xml` `.csv` `.yml` `.yaml` `.ini` `.cfg` `.bat` `.c` `.cpp` `.cs` `.css` `.go` `.h` `.hpp` `.html` `.java` `.js` `.jsx` `.php` `.ps1` `.py` `.rb` `.rs` `.sh` `.sql` `.toml` `.ts` `.tsx` |
 | Изображения | `.png` `.jpg` `.jpeg` `.bmp` `.gif` `.tga` `.psd` `.hdr` `.pic` |
 | Архивы | `.zip` `.tar` `.tgz` `.gz` (gzip читается как `.tar.gz`) `.7z` `.rar` |
+| Векторная графика | `.svg` `.svgz` |
 
 В очередь попадают только файлы, которые берёт хотя бы один модуль превью. Остальные считаются в строке `N hidden (unsupported)`.
 
@@ -64,7 +65,7 @@ dotnet publish src/LocalFileSorter/LocalFileSorter.csproj `
   -o publish/win-x64
 ```
 
-Результат — `publish/win-x64/LocalFileSorter.exe` (~37 МБ) и ничего больше в папке. Для ARM64 замените `-r win-x64` на `-r win-arm64`. Флаги `IncludeNativeLibrariesForSelfExtract` и `IncludeAllContentForSelfExtract` обязательны: без них рядом с exe останутся нативные DLL и папка `assets/`. .NET на целевой машине не нужен.
+Результат — `publish/win-x64/LocalFileSorter.exe` (~47 МБ) и ничего больше в папке. Для ARM64 замените `-r win-x64` на `-r win-arm64`. Флаги `IncludeNativeLibrariesForSelfExtract` и `IncludeAllContentForSelfExtract` обязательны: без них рядом с exe останутся нативные DLL и папка `assets/`. .NET на целевой машине не нужен.
 
 ## Структура
 
