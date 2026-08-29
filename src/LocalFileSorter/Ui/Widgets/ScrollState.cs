@@ -49,11 +49,19 @@ public sealed class ScrollState
         float travel = viewport.Size.Y - thumbHeight;
         float progress = Offset / (contentHeight - viewport.Size.Y);
 
-        painter.FillRect(
+        painter.DrawPart(
+            UiPart.ScrollTrack,
+            PartState.Normal,
+            new FloatRect(
+                new Vector2f(viewport.Position.X + viewport.Size.X - UiTheme.ScrollBarWidth, viewport.Position.Y),
+                new Vector2f(UiTheme.ScrollBarWidth, viewport.Size.Y)));
+
+        painter.DrawPart(
+            UiPart.ScrollThumb,
+            PartState.Normal,
             new FloatRect(
                 new Vector2f(viewport.Position.X + viewport.Size.X - UiTheme.ScrollBarWidth, viewport.Position.Y + (travel * progress)),
-                new Vector2f(UiTheme.ScrollBarWidth, thumbHeight)),
-            UiTheme.ScrollBar);
+                new Vector2f(UiTheme.ScrollBarWidth, thumbHeight)));
     }
 
     private void Clamp(float viewportHeight, float contentHeight)

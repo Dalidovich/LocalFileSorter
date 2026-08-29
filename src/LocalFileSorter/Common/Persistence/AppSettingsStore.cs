@@ -11,14 +11,7 @@ public sealed class AppSettingsStore
         this.filePath = filePath;
     }
 
-    public static AppSettingsStore ForCurrentUser()
-    {
-        string directory = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "LocalFileSorter");
-
-        return new AppSettingsStore(Path.Combine(directory, "settings.json"));
-    }
+    public string FilePath => filePath;
 
     public AppSettings Load()
     {
@@ -38,21 +31,17 @@ public sealed class AppSettingsStore
         }
     }
 
-    public void Save(AppSettings settings)
+    public bool Save(AppSettings settings)
     {
         try
         {
-            string? directory = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
             using FileStream stream = File.Create(filePath);
             JsonSerializer.Serialize(stream, settings, AppJsonContext.Default.AppSettings);
+            return true;
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
+            return false;
         }
     }
 }

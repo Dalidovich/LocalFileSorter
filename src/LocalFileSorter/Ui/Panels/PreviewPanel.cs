@@ -79,7 +79,7 @@ public sealed class PreviewPanel : Panel, IDisposable
 
     private void DrawViewport(Painter painter, UiContext input, FloatRect viewport)
     {
-        painter.FillRect(viewport, UiTheme.ViewportBackground);
+        painter.DrawPart(UiPart.Viewport, PartState.Normal, viewport);
 
         FileEntry? active = session.ActiveFile;
         if (active is null)
@@ -162,8 +162,7 @@ public sealed class PreviewPanel : Panel, IDisposable
 
     private void DrawMetadata(Painter painter, UiContext input, FloatRect strip)
     {
-        painter.FillRect(strip, UiTheme.PanelBackground);
-        painter.FillRect(new FloatRect(strip.Position, new Vector2f(strip.Size.X, 1f)), UiTheme.Separator);
+        painter.DrawPart(UiPart.MetadataStrip, PartState.Normal, strip);
 
         FileEntry? active = session.ActiveFile;
         if (active is null)
@@ -219,7 +218,7 @@ public sealed class PreviewPanel : Panel, IDisposable
 
     private void DrawNavigation(Painter painter, UiContext input, FloatRect row)
     {
-        painter.FillRect(row, UiTheme.PanelHeaderBackground);
+        painter.DrawPart(UiPart.NavigationBar, PartState.Normal, row);
 
         float buttonY = row.Position.Y + ((row.Size.Y - UiTheme.ButtonHeight) / 2f);
 

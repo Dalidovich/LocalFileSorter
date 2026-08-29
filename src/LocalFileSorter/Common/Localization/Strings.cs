@@ -13,6 +13,7 @@ public sealed class Strings
         StartupAborted = catalog.Resolve("startup.aborted");
         StartupOpening = catalog.Resolve("startup.opening");
         StartupMissingKeys = catalog.Resolve("startup.missingKeys");
+        StartupMissingThemeTokens = catalog.Resolve("startup.missingThemeTokens");
         StartupScanSummary = catalog.Resolve("startup.scanSummary");
         StartupBucketSummary = catalog.Resolve("startup.bucketSummary");
 
@@ -118,6 +119,7 @@ public sealed class Strings
     public string StartupAborted { get; }
     public string StartupOpening { get; }
     public string StartupMissingKeys { get; }
+    public string StartupMissingThemeTokens { get; }
     public string StartupScanSummary { get; }
     public string StartupBucketSummary { get; }
 

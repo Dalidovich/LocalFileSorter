@@ -18,15 +18,15 @@ public abstract class Panel
 
     public void Draw(Painter painter, UiContext input, FloatRect area)
     {
-        painter.FillRect(area, UiTheme.PanelBackground);
+        painter.DrawPart(UiPart.Panel, PartState.Normal, area);
 
         FloatRect header = new(area.Position, new Vector2f(area.Size.X, UiTheme.PanelHeaderHeight));
-        painter.FillRect(header, UiTheme.PanelHeaderBackground);
+        painter.DrawPart(UiPart.PanelHeader, PartState.Normal, header);
         painter.DrawText(
             Title,
             new Vector2f(header.Position.X + UiTheme.PanelPadding, header.Position.Y + 8f),
             UiTheme.HeaderTextSize,
-            UiTheme.TextPrimary);
+            UiTheme.Foreground(UiPart.PanelHeader));
 
         FloatRect body = new(
             new Vector2f(area.Position.X, area.Position.Y + UiTheme.PanelHeaderHeight),
@@ -34,7 +34,7 @@ public abstract class Panel
 
         DrawBody(painter, input, body);
 
-        painter.StrokeRect(area, UiTheme.PanelBorder);
+        painter.DrawPartFrame(UiPart.Panel, PartState.Normal, area);
     }
 
     protected abstract void DrawBody(Painter painter, UiContext input, FloatRect body);

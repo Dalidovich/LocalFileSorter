@@ -11,6 +11,10 @@ public sealed class Painter : IDisposable
     private readonly FontLibrary fonts;
     private readonly RectangleShape rectangle = new();
     private readonly CircleShape circle = new();
+    private readonly VertexArray quad = new(PrimitiveType.TriangleStrip, 4);
+    private readonly VertexArray fan = new(PrimitiveType.TriangleFan);
+    private readonly VertexArray outline = new(PrimitiveType.LineStrip);
+    private readonly SkinRenderer skin;
     private readonly Text uiText;
     private readonly Text monoText;
     private readonly View baseView = new();
@@ -24,6 +28,7 @@ public sealed class Painter : IDisposable
     {
         this.window = window;
         this.fonts = fonts;
+        skin = new SkinRenderer(this);
         uiText = new Text(fonts.Ui, string.Empty, UiTheme.BodyTextSize);
         monoText = new Text(fonts.Mono, string.Empty, UiTheme.BodyTextSize);
         Resize(window.Size);
@@ -69,13 +74,102 @@ public sealed class Painter : IDisposable
         window.Draw(rectangle);
     }
 
-    public void FillCircle(Vector2f center, float radius, Color color)
+    public void FillCircle(Vector2f center, float radius, Color color, Color? border = null, float borderThickness = 0f)
     {
         circle.Radius = radius;
         circle.Origin = new Vector2f(radius, radius);
         circle.Position = center;
         circle.FillColor = color;
+        circle.OutlineColor = border ?? Color.Transparent;
+        circle.OutlineThickness = border is null ? 0f : -borderThickness;
         window.Draw(circle);
+        circle.OutlineThickness = 0f;
+    }
+
+    public void DrawPart(UiPart part, PartState state, FloatRect area, Color? dataFill = null) =>
+        skin.DrawPart(part, state, area, dataFill);
+
+    public void DrawPartFrame(UiPart part, PartState state, FloatRect area) => skin.DrawFrame(part, state, area);
+
+    public void FillGradient(FloatRect area, Color from, Color to, GradientDirection direction, float radius = 0f)
+    {
+        if (radius > 0f)
+        {
+            FillFan(area, radius, from, to, direction);
+            return;
+        }
+
+        bool vertical = direction == GradientDirection.Vertical;
+        Vector2f position = area.Position;
+        Vector2f size = area.Size;
+
+        quad[0] = new Vertex(position, from);
+        quad[1] = new Vertex(new Vector2f(position.X + size.X, position.Y), vertical ? from : to);
+        quad[2] = new Vertex(new Vector2f(position.X, position.Y + size.Y), vertical ? to : from);
+        quad[3] = new Vertex(position + size, to);
+        window.Draw(quad);
+    }
+
+    public void FillRoundedRect(FloatRect area, Color color, float radius)
+    {
+        if (radius <= 0f)
+        {
+            FillRect(area, color);
+            return;
+        }
+
+        FillFan(area, radius, color, color, GradientDirection.Vertical);
+    }
+
+    public void StrokeRoundedRect(FloatRect area, Color color, float radius, float thickness = 1f)
+    {
+        if (radius <= 0f)
+        {
+            StrokeRect(area, color, thickness);
+            return;
+        }
+
+        for (int step = 0; step < (int)MathF.Max(1f, MathF.Round(thickness)); step++)
+        {
+            FloatRect inner = Deflate(area, step);
+            if (inner.Size.X <= 0f || inner.Size.Y <= 0f)
+            {
+                return;
+            }
+
+            outline.Clear();
+            foreach (Vector2f point in Perimeter(inner, MathF.Max(0f, radius - step)))
+            {
+                outline.Append(new Vertex(point, color));
+            }
+
+            window.Draw(outline);
+        }
+    }
+
+    public void DrawBevel(FloatRect area, Color light, Color dark, BevelKind kind, float thickness)
+    {
+        if (kind == BevelKind.Flat || thickness <= 0f)
+        {
+            return;
+        }
+
+        Color topLeft = kind == BevelKind.Sunken ? dark : light;
+        Color bottomRight = kind == BevelKind.Sunken ? light : dark;
+        float band = MathF.Min(thickness, MathF.Min(area.Size.X, area.Size.Y) / 2f);
+
+        FillRect(new FloatRect(area.Position, new Vector2f(area.Size.X, band)), topLeft);
+        FillRect(new FloatRect(area.Position, new Vector2f(band, area.Size.Y)), topLeft);
+        FillRect(
+            new FloatRect(
+                new Vector2f(area.Position.X, area.Position.Y + area.Size.Y - band),
+                new Vector2f(area.Size.X, band)),
+            bottomRight);
+        FillRect(
+            new FloatRect(
+                new Vector2f(area.Position.X + area.Size.X - band, area.Position.Y),
+                new Vector2f(band, area.Size.Y)),
+            bottomRight);
     }
 
     public void StrokeRect(FloatRect area, Color color, float thickness = 1f)
@@ -151,11 +245,102 @@ public sealed class Painter : IDisposable
     {
         rectangle.Dispose();
         circle.Dispose();
+        quad.Dispose();
+        fan.Dispose();
+        outline.Dispose();
         sprite?.Dispose();
         uiText.Dispose();
         monoText.Dispose();
         baseView.Dispose();
         clipView.Dispose();
+    }
+
+    private void FillFan(FloatRect area, float radius, Color from, Color to, GradientDirection direction)
+    {
+        Vector2f center = new(area.Position.X + (area.Size.X / 2f), area.Position.Y + (area.Size.Y / 2f));
+
+        fan.Clear();
+        fan.Append(new Vertex(center, Lerp(from, to, 0.5f)));
+
+        foreach (Vector2f point in Perimeter(area, radius))
+        {
+            fan.Append(new Vertex(point, Lerp(from, to, Progress(point, area, direction))));
+        }
+
+        window.Draw(fan);
+    }
+
+    private static IEnumerable<Vector2f> Perimeter(FloatRect area, float radius)
+    {
+        const int Segments = 4;
+
+        float left = area.Position.X;
+        float top = area.Position.Y;
+        float right = left + area.Size.X;
+        float bottom = top + area.Size.Y;
+        float corner = MathF.Min(radius, MathF.Min(area.Size.X, area.Size.Y) / 2f);
+
+        (float X, float Y, float Start)[] corners =
+        [
+            (left + corner, top + corner, MathF.PI),
+            (right - corner, top + corner, MathF.PI * 1.5f),
+            (right - corner, bottom - corner, 0f),
+            (left + corner, bottom - corner, MathF.PI * 0.5f),
+        ];
+
+        Vector2f first = default;
+
+        for (int index = 0; index < corners.Length; index++)
+        {
+            (float x, float y, float start) = corners[index];
+
+            for (int segment = 0; segment <= Segments; segment++)
+            {
+                float angle = start + (MathF.PI * 0.5f * segment / Segments);
+                Vector2f point = new(x + (MathF.Cos(angle) * corner), y + (MathF.Sin(angle) * corner));
+
+                if (index == 0 && segment == 0)
+                {
+                    first = point;
+                }
+
+                yield return point;
+            }
+        }
+
+        yield return first;
+    }
+
+    private static float Progress(Vector2f point, FloatRect area, GradientDirection direction)
+    {
+        float span = direction == GradientDirection.Vertical ? area.Size.Y : area.Size.X;
+        if (span <= 0f)
+        {
+            return 0f;
+        }
+
+        float offset = direction == GradientDirection.Vertical
+            ? point.Y - area.Position.Y
+            : point.X - area.Position.X;
+
+        return Math.Clamp(offset / span, 0f, 1f);
+    }
+
+    private static Color Lerp(Color from, Color to, float amount) => new(
+        Channel(from.R, to.R, amount),
+        Channel(from.G, to.G, amount),
+        Channel(from.B, to.B, amount),
+        Channel(from.A, to.A, amount));
+
+    private static byte Channel(byte from, byte to, float amount) =>
+        (byte)Math.Clamp(MathF.Round(from + ((to - from) * amount)), 0f, 255f);
+
+    private static FloatRect Deflate(FloatRect area, float amount)
+    {
+        float inset = amount + 0.5f;
+        return new FloatRect(
+            new Vector2f(area.Position.X + inset, area.Position.Y + inset),
+            new Vector2f(area.Size.X - (inset * 2f), area.Size.Y - (inset * 2f)));
     }
 
     private static FloatRect Intersect(FloatRect outer, FloatRect inner)

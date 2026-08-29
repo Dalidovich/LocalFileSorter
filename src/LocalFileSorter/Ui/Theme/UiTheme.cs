@@ -4,70 +4,186 @@ namespace LocalFileSorter.Ui.Theme;
 
 public static class UiTheme
 {
-    public const float QueueWidth = 320f;
-    public const float BucketsWidth = 320f;
-    public const float PanelGap = 1f;
-    public const float PanelHeaderHeight = 34f;
-    public const float PanelPadding = 12f;
+    private static readonly int StateCount = Enum.GetValues<PartState>().Length;
 
-    public const float QueueRowHeight = 40f;
-    public const float QueueFooterHeight = 28f;
-    public const float NavigationRowHeight = 44f;
-    public const float PaletteStripHeight = 140f;
-    public const float SwatchWidth = 92f;
-    public const float SwatchHeight = 34f;
-    public const float SwatchLabelHeight = 18f;
-    public const float SwatchGap = 8f;
-    public const float BucketRowHeight = 40f;
-    public const float BucketChipSize = 16f;
-    public const float MetadataRowHeight = 20f;
-    public const float MetadataStripPadding = 8f;
-    public const float ButtonWidth = 96f;
-    public const float ButtonHeight = 28f;
-    public const float BucketsFooterHeight = 138f;
-    public const float FooterButtonHeight = 34f;
-    public const float FooterButtonGap = 8f;
-    public const float ModalWidth = 480f;
-    public const float ModalPadding = 18f;
-    public const float ModalHeaderHeight = 34f;
-    public const float ModalRowHeight = 22f;
-    public const float ModalButtonWidth = 110f;
-    public const float ModalButtonGap = 10f;
-    public const float ProgressBarHeight = 10f;
-    public const float ScrollBarWidth = 6f;
-    public const float ScrollStep = 48f;
-    public const float TooltipPadding = 6f;
+    private static SurfaceStyle[] styles = BuildStyles(Skin.BuiltIn);
 
-    public const uint HeaderTextSize = 15u;
-    public const uint BodyTextSize = 14u;
-    public const uint SmallTextSize = 12u;
-    public const uint MonoTextSize = 13u;
+    static UiTheme() => Apply(Skin.BuiltIn);
 
-    public static readonly Color Background = new(24, 26, 30);
-    public static readonly Color PanelBackground = new(32, 35, 41);
-    public static readonly Color PanelHeaderBackground = new(41, 45, 53);
-    public static readonly Color PanelBorder = new(58, 63, 73);
-    public static readonly Color TextPrimary = new(226, 229, 235);
-    public static readonly Color TextMuted = new(132, 139, 152);
-    public static readonly Color TextDisabled = new(88, 94, 105);
+    public static Skin Current { get; private set; } = Skin.BuiltIn;
 
-    public static readonly Color ViewportBackground = new(26, 28, 33);
-    public static readonly Color RowHover = new(45, 50, 59);
-    public static readonly Color RowActive = new(52, 60, 74);
-    public static readonly Color RowActiveBorder = new(122, 162, 247);
-    public static readonly Color Separator = new(50, 55, 64);
-    public static readonly Color SwatchSelectedBorder = new(240, 243, 248);
+    public static float QueueWidth { get; private set; }
 
-    public static readonly Color ButtonBackground = new(48, 53, 62);
-    public static readonly Color ButtonHover = new(60, 67, 79);
-    public static readonly Color ButtonDisabled = new(38, 41, 48);
+    public static float BucketsWidth { get; private set; }
 
-    public static readonly Color ScrollBar = new(78, 85, 98);
-    public static readonly Color Scrim = new(10, 11, 14, 190);
-    public static readonly Color ModalBackground = new(38, 42, 50);
-    public static readonly Color ProgressTrack = new(26, 28, 33);
-    public static readonly Color ProgressFill = new(122, 162, 247);
-    public static readonly Color MessageInfo = new(150, 190, 140);
-    public static readonly Color MessageError = new(232, 122, 122);
-    public static readonly Color TooltipBackground = new(18, 20, 24);
+    public static float PanelGap { get; private set; }
+
+    public static float PanelHeaderHeight { get; private set; }
+
+    public static float PanelPadding { get; private set; }
+
+    public static float QueueRowHeight { get; private set; }
+
+    public static float QueueFooterHeight { get; private set; }
+
+    public static float NavigationRowHeight { get; private set; }
+
+    public static float PaletteStripHeight { get; private set; }
+
+    public static float SwatchWidth { get; private set; }
+
+    public static float SwatchHeight { get; private set; }
+
+    public static float SwatchLabelHeight { get; private set; }
+
+    public static float SwatchGap { get; private set; }
+
+    public static float BucketRowHeight { get; private set; }
+
+    public static float BucketChipSize { get; private set; }
+
+    public static float MetadataRowHeight { get; private set; }
+
+    public static float MetadataStripPadding { get; private set; }
+
+    public static float ButtonWidth { get; private set; }
+
+    public static float ButtonHeight { get; private set; }
+
+    public static float BucketsFooterHeight { get; private set; }
+
+    public static float FooterButtonHeight { get; private set; }
+
+    public static float FooterButtonGap { get; private set; }
+
+    public static float ModalWidth { get; private set; }
+
+    public static float ModalPadding { get; private set; }
+
+    public static float ModalHeaderHeight { get; private set; }
+
+    public static float ModalRowHeight { get; private set; }
+
+    public static float ModalButtonWidth { get; private set; }
+
+    public static float ModalButtonGap { get; private set; }
+
+    public static float ProgressBarHeight { get; private set; }
+
+    public static float ScrollBarWidth { get; private set; }
+
+    public static float ScrollStep { get; private set; }
+
+    public static float TooltipPadding { get; private set; }
+
+    public static float RowTintAmount { get; private set; }
+
+    public static float RowTintAmountHover { get; private set; }
+
+    public static float RowTintAmountActive { get; private set; }
+
+    public static float MovedMarkerTintAmount { get; private set; }
+
+    public static float SwatchHoverTintAmount { get; private set; }
+
+    public static float SwatchDisabledTintAmount { get; private set; }
+
+    public static uint HeaderTextSize { get; private set; }
+
+    public static uint BodyTextSize { get; private set; }
+
+    public static uint SmallTextSize { get; private set; }
+
+    public static uint MonoTextSize { get; private set; }
+
+    public static Color TextPrimary { get; private set; }
+
+    public static Color TextMuted { get; private set; }
+
+    public static Color TextDisabled { get; private set; }
+
+    public static Color MessageInfo { get; private set; }
+
+    public static Color MessageError { get; private set; }
+
+    public static Color SwatchHoverTint { get; private set; }
+
+    public static void Apply(Skin skin)
+    {
+        Current = skin;
+        styles = BuildStyles(skin);
+
+        QueueWidth = skin.Metrics["queueWidth"];
+        BucketsWidth = skin.Metrics["bucketsWidth"];
+        PanelGap = skin.Metrics["panelGap"];
+        PanelHeaderHeight = skin.Metrics["panelHeaderHeight"];
+        PanelPadding = skin.Metrics["panelPadding"];
+        QueueRowHeight = skin.Metrics["queueRowHeight"];
+        QueueFooterHeight = skin.Metrics["queueFooterHeight"];
+        NavigationRowHeight = skin.Metrics["navigationRowHeight"];
+        PaletteStripHeight = skin.Metrics["paletteStripHeight"];
+        SwatchWidth = skin.Metrics["swatchWidth"];
+        SwatchHeight = skin.Metrics["swatchHeight"];
+        SwatchLabelHeight = skin.Metrics["swatchLabelHeight"];
+        SwatchGap = skin.Metrics["swatchGap"];
+        BucketRowHeight = skin.Metrics["bucketRowHeight"];
+        BucketChipSize = skin.Metrics["bucketChipSize"];
+        MetadataRowHeight = skin.Metrics["metadataRowHeight"];
+        MetadataStripPadding = skin.Metrics["metadataStripPadding"];
+        ButtonWidth = skin.Metrics["buttonWidth"];
+        ButtonHeight = skin.Metrics["buttonHeight"];
+        BucketsFooterHeight = skin.Metrics["bucketsFooterHeight"];
+        FooterButtonHeight = skin.Metrics["footerButtonHeight"];
+        FooterButtonGap = skin.Metrics["footerButtonGap"];
+        ModalWidth = skin.Metrics["modalWidth"];
+        ModalPadding = skin.Metrics["modalPadding"];
+        ModalHeaderHeight = skin.Metrics["modalHeaderHeight"];
+        ModalRowHeight = skin.Metrics["modalRowHeight"];
+        ModalButtonWidth = skin.Metrics["modalButtonWidth"];
+        ModalButtonGap = skin.Metrics["modalButtonGap"];
+        ProgressBarHeight = skin.Metrics["progressBarHeight"];
+        ScrollBarWidth = skin.Metrics["scrollBarWidth"];
+        ScrollStep = skin.Metrics["scrollStep"];
+        TooltipPadding = skin.Metrics["tooltipPadding"];
+        RowTintAmount = skin.Metrics["rowTintAmount"];
+        RowTintAmountHover = skin.Metrics["rowTintAmountHover"];
+        RowTintAmountActive = skin.Metrics["rowTintAmountActive"];
+        MovedMarkerTintAmount = skin.Metrics["movedMarkerTintAmount"];
+        SwatchHoverTintAmount = skin.Metrics["swatchHoverTintAmount"];
+        SwatchDisabledTintAmount = skin.Metrics["swatchDisabledTintAmount"];
+
+        HeaderTextSize = skin.TextSizes["headerSize"];
+        BodyTextSize = skin.TextSizes["bodySize"];
+        SmallTextSize = skin.TextSizes["smallSize"];
+        MonoTextSize = skin.TextSizes["monoSize"];
+
+        TextPrimary = skin.Colors["textPrimary"];
+        TextMuted = skin.Colors["textMuted"];
+        TextDisabled = skin.Colors["textDisabled"];
+        MessageInfo = skin.Colors["messageInfo"];
+        MessageError = skin.Colors["messageError"];
+        SwatchHoverTint = skin.Colors["swatchHoverTint"];
+    }
+
+    public static SurfaceStyle Style(UiPart part, PartState state = PartState.Normal) =>
+        styles[((int)part * StateCount) + (int)state];
+
+    public static Color Foreground(UiPart part, PartState state = PartState.Normal) =>
+        Style(part, state).Foreground ?? TextPrimary;
+
+    private static SurfaceStyle[] BuildStyles(Skin skin)
+    {
+        int stateCount = Enum.GetValues<PartState>().Length;
+        SurfaceStyle[] table = new SurfaceStyle[Enum.GetValues<UiPart>().Length * stateCount];
+
+        foreach (UiPart part in Enum.GetValues<UiPart>())
+        {
+            foreach (PartState state in Enum.GetValues<PartState>())
+            {
+                table[((int)part * stateCount) + (int)state] = skin.Style(part, state);
+            }
+        }
+
+        return table;
+    }
 }

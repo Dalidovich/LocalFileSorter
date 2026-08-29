@@ -29,12 +29,11 @@ public sealed class TooltipHost
         float y = Math.Clamp(cursor.Y + 18f, 0f, MathF.Max(0f, surfaceSize.Y - height));
 
         FloatRect area = new(new Vector2f(x, y), new Vector2f(width, height));
-        painter.FillRect(area, UiTheme.TooltipBackground);
-        painter.StrokeRect(area, UiTheme.PanelBorder);
+        painter.DrawPart(UiPart.Tooltip, PartState.Normal, area);
         painter.DrawText(
             pending,
             new Vector2f(x + UiTheme.TooltipPadding, y + UiTheme.TooltipPadding),
             UiTheme.SmallTextSize,
-            UiTheme.TextPrimary);
+            UiTheme.Foreground(UiPart.Tooltip));
     }
 }

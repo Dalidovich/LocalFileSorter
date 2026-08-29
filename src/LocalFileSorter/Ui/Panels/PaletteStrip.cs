@@ -13,7 +13,7 @@ namespace LocalFileSorter.Ui.Panels;
 
 public sealed class PaletteStrip
 {
-    private const float CellHeight = UiTheme.SwatchHeight + UiTheme.SwatchLabelHeight + UiTheme.SwatchGap;
+    private static float CellHeight => UiTheme.SwatchHeight + UiTheme.SwatchLabelHeight + UiTheme.SwatchGap;
 
     private readonly Strings strings;
     private readonly SortSession session;
@@ -31,8 +31,7 @@ public sealed class PaletteStrip
 
     public void Draw(Painter painter, UiContext input, FloatRect area)
     {
-        painter.FillRect(area, UiTheme.PanelHeaderBackground);
-        painter.FillRect(new FloatRect(area.Position, new Vector2f(area.Size.X, 1f)), UiTheme.Separator);
+        painter.DrawPart(UiPart.PaletteStrip, PartState.Normal, area);
 
         if (session.Buckets.Count == 0)
         {

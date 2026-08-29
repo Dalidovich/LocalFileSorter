@@ -138,8 +138,7 @@ public sealed class CommitOverlay
             new Vector2f(content.Position.X, y + ((UiTheme.ModalRowHeight - UiTheme.BucketChipSize) / 2f)),
             new Vector2f(UiTheme.BucketChipSize, UiTheme.BucketChipSize));
 
-        painter.FillRect(chip, bucket.Color.ToSfml());
-        painter.StrokeRect(chip, UiTheme.PanelBorder);
+        painter.DrawPart(UiPart.BucketChip, PartState.Normal, chip, bucket.Color.ToSfml());
 
         float left = chip.Position.X + UiTheme.BucketChipSize + 10f;
         TextMetrics metrics = painter.Metrics(mono: false, UiTheme.BodyTextSize);
@@ -171,14 +170,15 @@ public sealed class CommitOverlay
             new Vector2f(layout.Content.Position.X, y + UiTheme.ModalPadding),
             new Vector2f(layout.Content.Size.X, UiTheme.ProgressBarHeight));
 
-        painter.FillRect(track, UiTheme.ProgressTrack);
+        painter.DrawPart(UiPart.ProgressTrack, PartState.Normal, track);
 
         float progress = runner.Total == 0 ? 0f : (float)runner.Completed / runner.Total;
-        painter.FillRect(
-            new FloatRect(track.Position, new Vector2f(track.Size.X * progress, track.Size.Y)),
-            UiTheme.ProgressFill);
+        painter.DrawPart(
+            UiPart.ProgressFill,
+            PartState.Normal,
+            new FloatRect(track.Position, new Vector2f(track.Size.X * progress, track.Size.Y)));
 
-        painter.StrokeRect(track, UiTheme.PanelBorder);
+        painter.DrawPartFrame(UiPart.ProgressTrack, PartState.Normal, track);
 
         if (Button.Draw(
                 painter,
@@ -260,7 +260,7 @@ public sealed class CommitOverlay
 
     private void DrawFailures(Painter painter, UiContext input, FloatRect list, IReadOnlyList<MoveFailure> failures)
     {
-        painter.FillRect(list, UiTheme.ViewportBackground);
+        painter.DrawPart(UiPart.ReportList, PartState.Normal, list);
 
         float contentHeight = failures.Count * UiTheme.ModalRowHeight;
         failureScroll.Apply(input, list, contentHeight);
@@ -301,6 +301,6 @@ public sealed class CommitOverlay
 
         painter.PopClip();
         failureScroll.DrawBar(painter, list, contentHeight);
-        painter.StrokeRect(list, UiTheme.PanelBorder);
+        painter.DrawPartFrame(UiPart.ReportList, PartState.Normal, list);
     }
 }

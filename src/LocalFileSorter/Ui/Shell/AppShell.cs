@@ -85,7 +85,7 @@ public sealed class AppShell : IDisposable
             commit.Update();
             previewPanel.SetSnapshot(loader.Update(session.ActiveFile));
 
-            window.Clear(UiTheme.Background);
+            window.Clear(UiTheme.Style(UiPart.Window).Fill);
             DrawFrame();
             window.Display();
         }
@@ -113,6 +113,8 @@ public sealed class AppShell : IDisposable
     {
         ShellLayout layout = ShellLayout.Compute(window.Size);
         Vector2f surfaceSize = new(window.Size.X, window.Size.Y);
+
+        painter.DrawPart(UiPart.Window, PartState.Normal, new FloatRect(new Vector2f(0f, 0f), surfaceSize));
 
         input.Blocked = commit.IsBlocking || mapping.IsBlocking;
         previewPanel.Draw(painter, input, layout.Preview);

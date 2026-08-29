@@ -9,6 +9,7 @@ using LocalFileSorter.Previews.Image;
 using LocalFileSorter.Previews.Text;
 using LocalFileSorter.Ui.Rendering;
 using LocalFileSorter.Ui.Shell;
+using LocalFileSorter.Ui.Theme;
 
 using SFML;
 
@@ -20,7 +21,7 @@ public static class Program
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        AppSettingsStore settingsStore = AppSettingsStore.ForCurrentUser();
+        AppSettingsStore settingsStore = new(PortablePaths.Settings);
         AppSettings settings = settingsStore.Load();
 
         if (!LocalizationCatalogLoader.TryLoad(AssetPaths.I18n, settings.Language, out LocalizationCatalog catalog, out string catalogPath))
@@ -30,6 +31,10 @@ public static class Program
 
         Strings strings = new(catalog);
         ReportMissingKeys(catalog, strings);
+
+        Skin skin = LoadSkin(settings.Theme);
+        UiTheme.Apply(skin);
+        ReportMissingTokens(skin, strings);
 
         StartupOptions? options = new ConsoleStartup(strings).Prompt();
         if (options is null)
@@ -54,7 +59,9 @@ public static class Program
 
         try
         {
-            using FontLibrary fonts = new(AssetPaths.UiFont, AssetPaths.MonoFont);
+            using FontLibrary fonts = new(
+                SkinLoader.ResolveFont(skin, skin.UiFont, AssetPaths.Fonts, AssetPaths.UiFont),
+                SkinLoader.ResolveFont(skin, skin.MonoFont, AssetPaths.Fonts, AssetPaths.MonoFont));
             using PreviewLoader loader = new(registry);
             using CommitRunner runner = new(plan, new MoveExecutor(strings));
             using AppShell shell = new(strings, fonts, session, plan, loader, runner, mappingService, settings);
@@ -66,8 +73,41 @@ public static class Program
             return 1;
         }
 
-        settingsStore.Save(settings);
+        if (!settingsStore.Save(settings))
+        {
+            Console.Error.WriteLine("Settings not saved, location is not writable: " + settingsStore.FilePath);
+        }
+
         return 0;
+    }
+
+    private static Skin LoadSkin(string name)
+    {
+        if (SkinLoader.TryLoad(PortablePaths.Themes, name, out Skin skin, out _))
+        {
+            return skin;
+        }
+
+        if (SkinLoader.TryLoad(AssetPaths.Themes, name, out skin, out string path))
+        {
+            return skin;
+        }
+
+        Console.Error.WriteLine("Theme not found: " + path);
+        return Skin.BuiltIn;
+    }
+
+    private static void ReportMissingTokens(Skin skin, Strings strings)
+    {
+        if (skin.MissingTokens.Count == 0)
+        {
+            return;
+        }
+
+        Console.Error.WriteLine(string.Format(
+            strings.StartupMissingThemeTokens,
+            skin.MissingTokens.Count,
+            string.Join(", ", skin.MissingTokens)));
     }
 
     private static void ReportMissingKeys(LocalizationCatalog catalog, Strings strings)

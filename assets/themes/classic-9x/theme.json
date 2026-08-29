@@ -1,0 +1,73 @@
+{
+  "name": "classic-9x",
+  "colors": {
+    "textPrimary": "#000000",
+    "textMuted": "#404040",
+    "textDisabled": "#808080",
+    "messageInfo": "#006000",
+    "messageError": "#800000",
+    "rowActiveBorder": "#000080",
+    "swatchSelectedBorder": "#000000",
+    "swatchHoverTint": "#FFFFFF",
+    "separator": "#808080"
+  },
+  "metrics": {
+    "panelHeaderHeight": 22, "panelPadding": 6,
+    "queueRowHeight": 22, "queueFooterHeight": 22, "navigationRowHeight": 32,
+    "paletteStripHeight": 132, "swatchWidth": 88, "swatchHeight": 26,
+    "swatchLabelHeight": 16, "swatchGap": 6,
+    "bucketRowHeight": 22, "bucketChipSize": 14,
+    "metadataRowHeight": 18, "metadataStripPadding": 6,
+    "buttonWidth": 92, "buttonHeight": 23,
+    "bucketsFooterHeight": 108, "footerButtonHeight": 24, "footerButtonGap": 6,
+    "modalHeaderHeight": 22, "modalPadding": 12, "modalRowHeight": 20,
+    "progressBarHeight": 16, "scrollBarWidth": 16, "scrollStep": 44,
+    "tooltipPadding": 4,
+    "swatchDisabledTintAmount": 0.45
+  },
+  "text": { "headerSize": 13, "bodySize": 12, "smallSize": 11, "monoSize": 12 },
+  "parts": {
+    "window":        { "kind": "solid", "fill": "#D4D0C8" },
+    "panel":         { "kind": "bevel", "fill": "#D4D0C8", "bevel": "raised",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#808080", "bevelThickness": 2 },
+    "panelHeader":   { "kind": "solid", "fill": "#000080", "foreground": "#FFFFFF" },
+    "panelFooter":   { "kind": "solid", "fill": "#D4D0C8", "border": "#808080", "borderEdges": "top" },
+    "paletteStrip":  { "kind": "solid", "fill": "#D4D0C8", "border": "#808080", "borderEdges": "top" },
+    "navigationBar": { "kind": "solid", "fill": "#D4D0C8" },
+    "metadataStrip": { "kind": "solid", "fill": "#D4D0C8", "border": "#808080", "borderEdges": "top" },
+    "viewport":      { "kind": "bevel", "fill": "#FFFFFF", "bevel": "sunken",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#404040", "bevelThickness": 2 },
+    "reportList":    { "kind": "bevel", "fill": "#FFFFFF", "bevel": "sunken",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#404040", "bevelThickness": 2 },
+
+    "queueRow":        { "kind": "solid", "fill": "#00000000" },
+    "queueRow.hover":  { "kind": "solid", "fill": "#E4E1DA" },
+    "queueRow.active": { "kind": "solid", "fill": "#000080", "foreground": "#FFFFFF" },
+    "bucketRow":       { "kind": "solid", "fill": "#00000000" },
+    "bucketRow.hover": { "kind": "solid", "fill": "#E4E1DA" },
+
+    "button":          { "kind": "bevel", "fill": "#D4D0C8", "bevel": "raised",
+                         "bevelLight": "#FFFFFF", "bevelDark": "#808080", "bevelThickness": 2,
+                         "foreground": "#000000" },
+    "button.hover":    { "kind": "bevel", "fill": "#DCD8D0" },
+    "button.disabled": { "kind": "bevel", "fill": "#D4D0C8", "foreground": "#808080" },
+
+    "swatch":        { "kind": "bevel", "bevel": "sunken", "bevelLight": "#FFFFFF",
+                       "bevelDark": "#808080", "bevelThickness": 1 },
+    "swatch.active": { "kind": "solid", "bevel": "flat", "border": "#000000", "borderThickness": 2 },
+    "bucketChip":    { "kind": "solid", "border": "#404040" },
+    "bucketMarker":  { "kind": "solid", "shape": "square", "border": "#404040" },
+
+    "modal":         { "kind": "bevel", "fill": "#D4D0C8", "bevel": "raised",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#808080", "bevelThickness": 2 },
+    "modalHeader":   { "kind": "solid", "fill": "#000080", "foreground": "#FFFFFF" },
+    "scrim":         { "kind": "solid", "fill": "#0000004D" },
+    "scrollThumb":   { "kind": "bevel", "fill": "#D4D0C8", "bevel": "raised",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#808080", "bevelThickness": 2 },
+    "scrollTrack":   { "kind": "solid", "fill": "#E9E6DF" },
+    "progressTrack": { "kind": "bevel", "fill": "#FFFFFF", "bevel": "sunken",
+                       "bevelLight": "#FFFFFF", "bevelDark": "#404040", "bevelThickness": 1 },
+    "progressFill":  { "kind": "solid", "fill": "#000080" },
+    "tooltip":       { "kind": "solid", "fill": "#FFFFE1", "border": "#000000" }
+  }
+}

@@ -14,12 +14,8 @@ namespace LocalFileSorter.Ui.Panels;
 public sealed class QueuePanel : Panel
 {
     private const float MarkerColumnWidth = 16f;
-    private const float MarkerRadius = 4f;
-    private const float AssignedTint = 0.16f;
-    private const float AssignedTintHover = 0.24f;
-    private const float AssignedTintActive = 0.32f;
+    private const float MarkerSize = 8f;
     private const float StrikeThickness = 1f;
-    private const float MovedMarkerTint = 0.35f;
 
     private readonly Strings strings;
     private readonly SortSession session;
@@ -113,17 +109,22 @@ public sealed class QueuePanel : Panel
         Bucket? bucket = entry.AssignedBucket is BucketId id ? session.FindBucket(id) : null;
 
         bool moved = entry.State == FileState.Moved;
-        DrawRowBackground(painter, row, moved ? null : bucket, active, hovering);
+        PartState state = active ? PartState.Active : hovering ? PartState.Hover : PartState.Normal;
+
+        DrawRowBackground(painter, row, moved ? null : bucket, state);
 
         if (bucket is not null)
         {
-            painter.FillCircle(
-                new Vector2f(
-                    row.Position.X + UiTheme.PanelPadding + (MarkerColumnWidth / 2f),
-                    row.Position.Y + (row.Size.Y / 2f)),
-                MarkerRadius,
+            painter.DrawPart(
+                UiPart.BucketMarker,
+                PartState.Normal,
+                new FloatRect(
+                    new Vector2f(
+                        row.Position.X + UiTheme.PanelPadding + ((MarkerColumnWidth - MarkerSize) / 2f),
+                        row.Position.Y + ((row.Size.Y - MarkerSize) / 2f)),
+                    new Vector2f(MarkerSize, MarkerSize)),
                 moved
-                    ? ColorMap.Mix(bucket.Color.ToSfml(), UiTheme.PanelBackground, MovedMarkerTint)
+                    ? ColorMap.Mix(bucket.Color.ToSfml(), UiTheme.Style(UiPart.Panel).Fill, UiTheme.MovedMarkerTintAmount)
                     : bucket.Color.ToSfml());
         }
 
@@ -142,7 +143,7 @@ public sealed class QueuePanel : Panel
             name,
             new Vector2f(textLeft, nameTop),
             UiTheme.BodyTextSize,
-            NameColor(entry.State));
+            NameColor(entry.State, state));
 
         if (entry.State == FileState.Failed)
         {
@@ -161,22 +162,17 @@ public sealed class QueuePanel : Panel
             UiTheme.SmallTextSize,
             UiTheme.TextMuted);
 
-        if (active)
-        {
-            painter.StrokeRect(row, UiTheme.RowActiveBorder);
-        }
-
         if (hovering)
         {
             ShowRowTooltip(entry, name);
         }
     }
 
-    private static Color NameColor(FileState state) => state switch
+    private static Color NameColor(FileState file, PartState row) => file switch
     {
         FileState.Moved => UiTheme.TextDisabled,
         FileState.Failed => UiTheme.MessageError,
-        _ => UiTheme.TextPrimary,
+        _ => UiTheme.Foreground(UiPart.QueueRow, row),
     };
 
     private void ShowRowTooltip(FileEntry entry, string shownName)
@@ -191,24 +187,21 @@ public sealed class QueuePanel : Panel
         }
     }
 
-    private static void DrawRowBackground(Painter painter, FloatRect row, Bucket? bucket, bool active, bool hovering)
+    private static void DrawRowBackground(Painter painter, FloatRect row, Bucket? bucket, PartState state)
     {
-        if (bucket is not null)
-        {
-            painter.FillRect(row, ColorMap.Mix(
-                bucket.Color.ToSfml(),
-                UiTheme.PanelBackground,
-                active ? AssignedTintActive : hovering ? AssignedTintHover : AssignedTint));
-        }
-        else if (active)
-        {
-            painter.FillRect(row, UiTheme.RowActive);
-        }
-        else if (hovering)
-        {
-            painter.FillRect(row, UiTheme.RowHover);
-        }
+        Color? tinted = bucket is null
+            ? null
+            : ColorMap.Mix(bucket.Color.ToSfml(), UiTheme.Style(UiPart.Panel).Fill, TintAmount(state));
+
+        painter.DrawPart(UiPart.QueueRow, state, row, tinted);
     }
+
+    private static float TintAmount(PartState state) => state switch
+    {
+        PartState.Active => UiTheme.RowTintAmountActive,
+        PartState.Hover => UiTheme.RowTintAmountHover,
+        _ => UiTheme.RowTintAmount,
+    };
 
     private string BuildFooterText()
     {
@@ -229,7 +222,7 @@ public sealed class QueuePanel : Panel
 
     private void DrawFooter(Painter painter, UiContext input, FloatRect footer, string text)
     {
-        painter.FillRect(footer, UiTheme.PanelHeaderBackground);
+        painter.DrawPart(UiPart.PanelFooter, PartState.Normal, footer);
         painter.DrawText(
             text,
             new Vector2f(

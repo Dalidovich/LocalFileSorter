@@ -8,6 +8,8 @@ public static class AssetPaths
 
     public static string I18n { get; } = Path.Combine(Root, "i18n");
 
+    public static string Themes { get; } = Path.Combine(Root, "themes");
+
     public static string UiFont { get; } = Path.Combine(Fonts, "NotoSans-Regular.ttf");
 
     public static string MonoFont { get; } = Path.Combine(Fonts, "DejaVuSansMono.ttf");

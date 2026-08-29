@@ -1,0 +1,66 @@
+{
+  "name": "flat-dark",
+  "colors": {
+    "textPrimary": "#E2E5EB",
+    "textMuted": "#848B98",
+    "textDisabled": "#585E69",
+    "messageInfo": "#96BE8C",
+    "messageError": "#E87A7A",
+    "rowActiveBorder": "#7AA2F7",
+    "swatchSelectedBorder": "#F0F3F8",
+    "swatchHoverTint": "#FFFFFF",
+    "separator": "#323740"
+  },
+  "metrics": {
+    "queueWidth": 320, "bucketsWidth": 320, "panelGap": 1,
+    "panelHeaderHeight": 34, "panelPadding": 12,
+    "queueRowHeight": 40, "queueFooterHeight": 28, "navigationRowHeight": 44,
+    "paletteStripHeight": 140, "swatchWidth": 92, "swatchHeight": 34,
+    "swatchLabelHeight": 18, "swatchGap": 8,
+    "bucketRowHeight": 40, "bucketChipSize": 16,
+    "metadataRowHeight": 20, "metadataStripPadding": 8,
+    "buttonWidth": 96, "buttonHeight": 28,
+    "bucketsFooterHeight": 138, "footerButtonHeight": 34, "footerButtonGap": 8,
+    "modalWidth": 480, "modalPadding": 18, "modalHeaderHeight": 34,
+    "modalRowHeight": 22, "modalButtonWidth": 110, "modalButtonGap": 10,
+    "progressBarHeight": 10, "scrollBarWidth": 6, "scrollStep": 48,
+    "tooltipPadding": 6,
+    "rowTintAmount": 0.16, "rowTintAmountHover": 0.24, "rowTintAmountActive": 0.32,
+    "movedMarkerTintAmount": 0.35,
+    "swatchHoverTintAmount": 0.18, "swatchDisabledTintAmount": 0.35
+  },
+  "text": { "headerSize": 15, "bodySize": 14, "smallSize": 12, "monoSize": 13 },
+  "parts": {
+    "window":        { "kind": "solid", "fill": "#181A1E" },
+    "panel":         { "kind": "solid", "fill": "#202329", "border": "#3A3F49" },
+    "panelHeader":   { "kind": "solid", "fill": "#292D35", "foreground": "#E2E5EB" },
+    "panelFooter":   { "kind": "solid", "fill": "#292D35", "border": "#323740", "borderEdges": "top" },
+    "paletteStrip":  { "kind": "solid", "fill": "#292D35", "border": "#323740", "borderEdges": "top" },
+    "navigationBar": { "kind": "solid", "fill": "#292D35" },
+    "metadataStrip": { "kind": "solid", "fill": "#202329", "border": "#323740", "borderEdges": "top" },
+    "viewport":      { "kind": "solid", "fill": "#1A1C21" },
+    "reportList":    { "kind": "solid", "fill": "#1A1C21", "border": "#3A3F49" },
+
+    "queueRow":        { "kind": "solid", "fill": "#00000000" },
+    "queueRow.hover":  { "kind": "solid", "fill": "#2D323B" },
+    "queueRow.active": { "kind": "solid", "fill": "#343C4A", "border": "#7AA2F7" },
+    "bucketRow.hover": { "kind": "solid", "fill": "#2D323B" },
+
+    "button":          { "kind": "solid", "fill": "#30353E", "border": "#3A3F49", "foreground": "#E2E5EB" },
+    "button.hover":    { "kind": "solid", "fill": "#3C434F" },
+    "button.disabled": { "kind": "solid", "fill": "#262930", "foreground": "#585E69" },
+
+    "swatch":        { "kind": "solid", "border": "#3A3F49", "borderThickness": 1 },
+    "swatch.active": { "kind": "solid", "border": "#F0F3F8", "borderThickness": 2 },
+    "bucketChip":    { "kind": "solid", "border": "#3A3F49" },
+    "bucketMarker":  { "kind": "solid", "shape": "circle" },
+
+    "modal":         { "kind": "solid", "fill": "#262A32", "border": "#3A3F49" },
+    "modalHeader":   { "kind": "solid", "fill": "#292D35", "foreground": "#E2E5EB" },
+    "scrim":         { "kind": "solid", "fill": "#0A0B0EBE" },
+    "scrollThumb":   { "kind": "solid", "fill": "#4E5562" },
+    "progressTrack": { "kind": "solid", "fill": "#1A1C21", "border": "#3A3F49" },
+    "progressFill":  { "kind": "solid", "fill": "#7AA2F7" },
+    "tooltip":       { "kind": "solid", "fill": "#121418", "border": "#3A3F49" }
+  }
+}

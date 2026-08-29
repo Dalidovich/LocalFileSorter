@@ -12,7 +12,7 @@ public static class ModalDialog
 {
     public static ModalLayout Draw(Painter painter, FloatRect surface, float contentHeight, string title)
     {
-        painter.FillRect(surface, UiTheme.Scrim);
+        painter.DrawPart(UiPart.Scrim, PartState.Normal, surface);
 
         float height = UiTheme.ModalHeaderHeight
             + (UiTheme.ModalPadding * 3f)
@@ -28,15 +28,15 @@ public static class ModalDialog
                 surface.Position.Y + ((surface.Size.Y - height) / 2f)),
             new Vector2f(width, height));
 
-        painter.FillRect(box, UiTheme.ModalBackground);
+        painter.DrawPart(UiPart.Modal, PartState.Normal, box);
 
         FloatRect header = new(box.Position, new Vector2f(box.Size.X, UiTheme.ModalHeaderHeight));
-        painter.FillRect(header, UiTheme.PanelHeaderBackground);
+        painter.DrawPart(UiPart.ModalHeader, PartState.Normal, header);
         painter.DrawText(
             title,
             new Vector2f(header.Position.X + UiTheme.ModalPadding, header.Position.Y + 8f),
             UiTheme.HeaderTextSize,
-            UiTheme.TextPrimary);
+            UiTheme.Foreground(UiPart.ModalHeader));
 
         FloatRect buttons = new(
             new Vector2f(
@@ -51,7 +51,7 @@ public static class ModalDialog
                 MathF.Max(0f, box.Size.X - (UiTheme.ModalPadding * 2f)),
                 MathF.Max(0f, buttons.Position.Y - UiTheme.ModalPadding - contentTop)));
 
-        painter.StrokeRect(box, UiTheme.PanelBorder);
+        painter.DrawPartFrame(UiPart.Modal, PartState.Normal, box);
 
         return new ModalLayout(box, content, buttons);
     }

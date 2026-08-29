@@ -8,6 +8,7 @@
   "startup.aborted": "Aborted.",
   "startup.opening": "Opening window...",
   "startup.missingKeys": "Missing localization keys ({0}): {1}",
+  "startup.missingThemeTokens": "Theme tokens the skin could not provide ({0}): {1}",
   "startup.scanSummary": "Queued {0} file(s); skipped {1} unsupported.",
   "startup.bucketSummary": "Discovered {0} bucket(s) in the destination folder.",
 

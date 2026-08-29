@@ -12,11 +12,10 @@ public static class ColorSwatch
     {
         bool hovering = enabled && input.IsHovering(area);
         Color fill = enabled
-            ? hovering ? ColorMap.Mix(Color.White, color, 0.18f) : color
-            : ColorMap.Mix(color, UiTheme.PanelBackground, 0.35f);
+            ? hovering ? ColorMap.Mix(UiTheme.SwatchHoverTint, color, UiTheme.SwatchHoverTintAmount) : color
+            : ColorMap.Mix(color, UiTheme.Style(UiPart.Panel).Fill, UiTheme.SwatchDisabledTintAmount);
 
-        painter.FillRect(area, fill);
-        painter.StrokeRect(area, selected ? UiTheme.SwatchSelectedBorder : UiTheme.PanelBorder, selected ? 2f : 1f);
+        painter.DrawPart(UiPart.Swatch, selected ? PartState.Active : PartState.Normal, area, fill);
 
         return enabled && input.ClickedIn(area);
     }

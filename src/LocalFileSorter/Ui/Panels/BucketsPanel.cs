@@ -106,8 +106,7 @@ public sealed class BucketsPanel : Panel
 
     private void DrawFooter(Painter painter, UiContext input, FloatRect footer)
     {
-        painter.FillRect(footer, UiTheme.PanelHeaderBackground);
-        painter.FillRect(new FloatRect(footer.Position, new Vector2f(footer.Size.X, 1f)), UiTheme.Separator);
+        painter.DrawPart(UiPart.PanelFooter, PartState.Normal, footer);
 
         float stackHeight = (UiTheme.FooterButtonHeight * 3f) + (UiTheme.FooterButtonGap * 2f);
         float top = footer.Position.Y + ((footer.Size.Y - stackHeight) / 2f);
@@ -144,10 +143,9 @@ public sealed class BucketsPanel : Panel
     private void DrawRow(Painter painter, UiContext input, FloatRect row, Bucket bucket, bool insideList)
     {
         bool hovering = insideList && input.IsHovering(row);
-        if (hovering)
-        {
-            painter.FillRect(row, UiTheme.RowHover);
-        }
+        PartState state = hovering ? PartState.Hover : PartState.Normal;
+
+        painter.DrawPart(UiPart.BucketRow, state, row);
 
         FloatRect chip = new(
             new Vector2f(
@@ -175,7 +173,7 @@ public sealed class BucketsPanel : Panel
             name,
             new Vector2f(nameLeft, row.Position.Y + ((row.Size.Y - nameMetrics.LineHeight) / 2f)),
             UiTheme.BodyTextSize,
-            UiTheme.TextPrimary);
+            UiTheme.Foreground(UiPart.BucketRow, state));
 
         painter.DrawText(
             count,
